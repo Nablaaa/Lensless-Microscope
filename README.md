@@ -1,4 +1,4 @@
-![alt text](./plantseg/gui/logo.png)
+![titlepage](pictures/Logo.png)
 
 # Lensless-Microscope
 This repository is created for the open source project of a lensless microscope, which I created for education in schools. Nevertheless the concepts can also be used in other projects.
@@ -28,8 +28,8 @@ To activate conda, you have to open the terminal and type in
 ```bash
 conda activate
 ```
-with linux it is already activated. It looks like the following than:
-![alt text](./plantseg/gui/logoooo.png)
+with linux it is already activated. It looks like the following than (in Windows it is something like "(base)" in the beginning of the line):
+![condaactivate](pictures/conda-activate.png)
 
 
 If you have problems with this steps, than check out Step 1 here: [conda environment](https://github.com/BiAPoL/Bio-image_Analysis_with_Python/blob/main/conda_basics/01_conda_environments.md) 
@@ -45,10 +45,10 @@ and hit enter afterward. This installs the libraries of **cv2** and **imageio**.
 ### Try it out
 Create a new file with a texteditor of your choice (e.g. Geany or the standard text editor) and save the file as "test.py" in a folder of your choice. Write in this file: 
 
-> import cv2
-> import imageio
-> print("Hello World")
-> print(5 + 5)
+import cv2
+import imageio
+print("Hello World")
+print(5 + 5)
 
 
 #### Linux
