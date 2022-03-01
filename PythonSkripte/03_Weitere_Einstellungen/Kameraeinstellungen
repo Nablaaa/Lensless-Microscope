@@ -1,0 +1,13 @@
+
+#Kamera.set(5, 20) # Bildrate geht nicht (aber manuell)
+#Kamera.set(10, 50) # helligkeit von 0 bis 255
+#Kamera.set(11, -255 + 5* i) # Kontrast 0 bis 150
+#Kamera.set(12, -255 + 5* i) # Saettingung 0 bis 150
+#Kamera.set(13, -300 + 6* i) # hue -160 bis 200
+#Kamera.set(14, 0 + 2* i) # gain geht nicht
+#Kamera.set(15, -4) # belichtungszeit geht nicht aber man kann zwei bilder addieren
+#Kamera.set(17, -200 + 8*i) # weissabgleich geht nicht
+
+https://docs.opencv.org/3.4/d4/d15/group__videoio__flags__base.html#gaeb8dd9c89c10a5c63c139bf7c4f5704d
+
+https://stackoverflow.com/questions/11420748/setting-camera-parameters-in-opencv-python
