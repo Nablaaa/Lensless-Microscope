@@ -45,12 +45,12 @@ and hit enter afterward. This installs the libraries of **cv2** and **imageio**.
 
 ### Try it out
 Create a new file with a texteditor of your choice (e.g. Geany or the standard text editor) and save the file as "test.py" in a folder of your choice. Write in this file: 
-
+```bash
 import cv2
 import imageio
 print("Hello World")
 print(5 + 5)
-
+```
 
 #### Linux
 Open the folder and make a right klick there. Click on "Open in terminal". Than the terminal, in which conda is already activated, appears. Type in:
