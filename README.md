@@ -29,6 +29,7 @@ To activate conda, you have to open the terminal and type in
 conda activate
 ```
 with linux it is already activated. It looks like the following than:
+
 ![condaactivate](pictures/Conda-activate.png)
 
 
