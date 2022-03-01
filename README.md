@@ -33,7 +33,7 @@ with linux it is already activated. It looks like the following than:
 ![condaactivate](pictures/Conda-activate.png)
 
 
-If you have problems with this steps, than check out Step 1 here: [conda environment](https://github.com/BiAPoL/Bio-image_Analysis_with_Python/blob/main/conda_basics/01_conda_environments.md) 
+If you have problems with these steps, than check out Step 1 here: [conda environment](https://github.com/BiAPoL/Bio-image_Analysis_with_Python/blob/main/conda_basics/01_conda_environments.md) 
 
 ### Install packages
 For our purpose, we only need a few packages, that's why we skip the powerfull tool of creating conda environments (if you are nevertheless interested in it, search for **conda create**). To install the packages we type into the opened terminal:
