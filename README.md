@@ -28,7 +28,7 @@ To activate conda, you have to open the terminal and type in
 ```bash
 conda activate
 ```
-with linux it is already activated. It looks like the following than (in Windows it is something like "(base)" in the beginning of the line):
+with linux it is already activated. It looks like the following than:
 ![condaactivate](pictures/Conda-activate.png)
 
 
