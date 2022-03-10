@@ -22,9 +22,9 @@ Programmen wiederholt werden.
 Viel Spass beim ausprobieren!
 """
 
+# als erstes wieder alle bibliotheken importieren
 import cv2
 import time
-import imageio
 import os
 
 
@@ -41,11 +41,10 @@ class Kameramodul():
 		Kamera (z.B. 0 falls die Laptopkamera angesprochen werden soll) 
 		wCam (weite des Bildes)
 		hCam (hoehe des Bildes)
-		belichtungszeit
 	initialisiert. 
 	
 	Falls die Parameter nicht weiter spezifiziert werden, dann werden sie mit 
-	0, 640, 480, 0.001 initialisiert.
+	0, 640, 480 initialisiert.
 	"""
 
 	# Achtung! Der __init__ Bereich sieht aus wie Zeitverschwendung, aber wenn
@@ -66,13 +65,18 @@ class Kameramodul():
 		zurueck greifen. Das aber nur am Rande!
 		"""
 		
+		# initialisiere kamera
 		self.Kamera = cv2.VideoCapture(kamera)
 		
-		self.wCam = wCam
-		self.hCam = hCam
 		
-		self.Kamera.set(3, self.wCam)
-		self.Kamera.set(4, self.hCam)
+		# setze die Weite und Hoehe
+		self.Kamera.set(3, wCam)
+		self.Kamera.set(4, hCam)
+		
+		# Ueberschreibe hoehe und weite, falls die kamera doch etwas anderes 
+		# macht
+		self.wCam = int(self.Kamera.get(3))
+		self.hCam = int(self.Kamera.get(4))
 		
 				
 	def kameraeinstellungen(self, Helligkeit=20, Kontrast=20, 
@@ -103,18 +107,17 @@ class Kameramodul():
 			self.Kamera.set(modus, wert)
 	
 					
-	def videoansicht(self, laufzeit=5):
+	def videoansicht(self):
 		"""
 		Diese Funktion dient der Ansicht von Videos fuer eine bestimmte Zeit.
-		Es werden keine Videos gespeichert. Falls beim Aufruf der Funktion
-		kein Parameter uebergeben wird, ist der "default" Wert = 5 Sekunden
+		Es werden keine Videos gespeichert. Es werden keine weiteren Parameter
+		uebergeben (nur die von vorher, die mit "self." angesprochen werden
 		"""
 	
 		startzeit = time.time()
 		vorherige_Zeit = startzeit
 		
-		schleife = True
-		while schleife:
+		while True:
 			success, img = self.Kamera.read()	
 			
 			aktuelle_Zeit = time.time()
@@ -123,23 +126,25 @@ class Kameramodul():
 			vorherige_Zeit = aktuelle_Zeit 
 
 			# schreibe die Zeit und "Framerate" in das Display
-			text = str(int(fps)) + " FPS, Laufzeit: " + str(int(
-							time.time() - startzeit)) + " s"
+			text ="Videoansicht: Laufzeit: " + str(int(
+					time.time() - startzeit)) + " s, " + str(int(fps)) + " FPS"
 													
 			cv2.putText(img, text, (10, 70), cv2.FONT_HERSHEY_PLAIN,
-						3, (255, 100, 0), 3)
+						3, (0, 255, 0), 3)
 			
+			text2 = "druecke 'e' zum beenden"
+			cv2.putText(img, text2, (10, 150), cv2.FONT_HERSHEY_PLAIN,
+						3, (0, 255, 0), 3)
+					
 			# Zeige das Foto an
 			cv2.imshow("Image",img)
-			cv2.waitKey(1)
 		
-			# Gehe aus schleife raus, wenn laufzeit ueberschritten ist
-			if time.time() - startzeit >= laufzeit:
-				schleife = False
-		
+			# Sobald Sie den Buchstaben e (ende) druecken, schliesst das Programm
+			if cv2.waitKey(1) & 0xFF == ord('e'):
+				break
 			
 			
-	def videoaufnahme(self, Speicherort, gif_name, anzahl_Bilder):
+	def videoaufnahme(self, Speicherort, videoname, anzahl_Bilder, fps):
 		"""
 		Zeige Video und speichere es gleich ab. In der Wissenschaft ist es
 		angebracht, seine Daten ordentlich zu bennenen. So ist es eigentlich
@@ -147,11 +152,11 @@ class Kameramodul():
 		Das wird hier auch gemacht. Und schon lohnt es sich, dass die Parameter
 		ueberall mit "self.Parametername" aufgerufen werden koennen.
 		
-		Der Rest ist bereits bekannt.
+		Der Rest ist bereits bekannt. (auch hier ist wieder cool, dass wir mit
+		self.XY auf alle Variablen zugreifen koennen)
 		"""
 		
-		
-		speichername = gif_name + "-dim-" + str(self.hCam) + "_px_" + str(
+		speichername = videoname + "-dim-" + str(self.hCam) + "_px_" + str(
 						self.wCam) + "_px-Helligkeit-" + str(
 						self.Helligkeit) + "-Kontrast-" + str(
 						self.Kontrast)  + "-Saettigung-" + str(
@@ -181,42 +186,57 @@ class Kameramodul():
 			print ("Der Ordner %s wurde erfolgreich erstellt" % Speicherort)
 	
 	
-		gif_pfad = Speicherort + "/" + speichername
+		speicher_pfad = Speicherort + "/" + videoname
 		
 		startzeit = time.time()
 		vorherige_Zeit = startzeit
 		
-		# kommando zum speicher der fotos
-		with imageio.get_writer(gif_pfad, mode='I') as writer:
+	
+		# initialisiere den video writer.
+		fourcc = cv2.VideoWriter_fourcc(*'MPEG')
+		video_writer = cv2.VideoWriter(speicher_pfad,fourcc,
+						 fps, (self.wCam,self.hCam))
+
+
+
+
+		# wiederhole vorgang "anzahl_Bilder" mal 
+		for i in range(anzahl_Bilder):
+			success, img = self.Kamera.read()	
 			
-			# wiederhole vorgang "anzahl_Bilder" mal 
-			for i in range(anzahl_Bilder):
-				success, img = self.Kamera.read()	
-				
-				#############################################################
-				# Zeit messung und ausgabe
-				
-				aktuelle_Zeit = time.time()	
-				aufnahmedauer = aktuelle_Zeit - vorherige_Zeit
-				
-				text = str(int(i)) + ":  " + str(round(
-						aktuelle_Zeit - startzeit,3)) + " s "  + str(round(
-						aufnahmedauer,3)) + " s " 
+			#############################################################
+			# Zeit messung und ausgabe
+			
+			aktuelle_Zeit = time.time()	
+			aufnahmedauer = aktuelle_Zeit - vorherige_Zeit
+			
+			text = "Videoaufname, druecke 'e' zum beenden"
+			cv2.putText(img, text, (10, 70), cv2.FONT_HERSHEY_PLAIN,
+					3, (0, 100, 2550), 3)
+			
+			text2 = str(int(i)) + ":  " + str(round(
+					aktuelle_Zeit - startzeit,3)) + " s "  + str(round(
+					aufnahmedauer,3)) + " s " 
 
-				vorherige_Zeit = aktuelle_Zeit
+			vorherige_Zeit = aktuelle_Zeit
 
-				cv2.putText(img, text, (10, 70), cv2.FONT_HERSHEY_PLAIN,
-						3, (0, 100, 2550), 3)
-				#############################################################	
-					
-				# Zeige die Bilder im Display an
-				cv2.imshow("Image",img)
+			cv2.putText(img, text2, (10, 150), cv2.FONT_HERSHEY_PLAIN,
+					3, (0, 100, 2550), 3)
+			#############################################################	
 				
-				# Konvertiere Format von BGR zu RGB
-				# und speichere es mit 'writer'
-				imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-				writer.append_data(imgRGB)
-				cv2.waitKey(1)
+			# Zeige die Bilder im Display an
+			cv2.imshow("Image",img)
+			
+			# bringe img in richtiges format, falls es nicht bereits richtig ist
+			img = cv2.resize(img,(self.wCam,self.hCam)) 
+			
+			# fuege das bild zum video hinzu
+			video_writer.write(img)
+			
+			# Sobald Sie den Buchstaben e (ende) druecken, schliesst das Programm
+			if (cv2.waitKey(1) & 0xFF == ord('e')):
+				break
+
 
 
 
@@ -253,15 +273,17 @@ def main():
 	
 	
 	# starte ein video, z.B. um zu sehen ob die einstellungen gut sind
-	USB_Kamera.videoansicht(laufzeit = 1)	
+	USB_Kamera.videoansicht()	
 	
 	
-	Speicherort = "Experiment-01"
-	gif_name = "04_Kameramodul"
-	anzahl_Bilder = 300	
+	Speicherort = "Experimentordner"
+	videoname = "Video-titel.avi" # endung .avi ist wichtig
+	anzahl_Bilder = 300	# maximale anzahl von Bildern (danach wird die Aufnahme
+						# automatisch beendet
+	fps = 50
 	
 	# nehme ein video auf
-	USB_Kamera.videoaufnahme(Speicherort, gif_name, anzahl_Bilder)
+	USB_Kamera.videoaufnahme(Speicherort, videoname, anzahl_Bilder, fps)
 
 	
 	
@@ -270,7 +292,6 @@ def main():
 if __name__ == "__main__":
 	main()
 	
-
 
 
 
