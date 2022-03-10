@@ -7,7 +7,7 @@ In diesem Programm soll getestet werden, ob:
 - die Kamera funktioniert
 - das Bild am Computer angezeigt wird
 - Kommentare in das Bild eingefuget werden koennen
-
+- das Programm schliesst wenn man den Buchstaben 'e' drueckt
 
 Weiterhin soll es dazu dienen ein Gefuehl fuer das Programmieren zu bekommen.
 Fuehlen Sie sich daher frei, alle Einstellung zu veraendern und zu sehen was 
@@ -24,7 +24,7 @@ import time # Zeitmessungen
 
 # suche eine Kamera aus 
 # (0 is die eingebaute kamera im laptop, 1,2,3,... sind weitere Anschluesse)
-Kamera = cv2.VideoCapture(2) # der name Kamera ist nun bereit und kann verandert
+Kamera = cv2.VideoCapture(0) # der name Kamera ist nun bereit und kann verandert
 							 # werden. Zum Beispiel kann die Aufloesung 
 							 # eingestellt werden
 
@@ -33,24 +33,15 @@ wCam, hCam = 640, 480 # weite und hoehe des Bildes
 Kamera.set(3, wCam)
 Kamera.set(4, hCam)
 
-
-
-
 # optional wollen wir hier die Anzahl der Bilder pro Sekunde (fps) berechnen.
 # Dazu muss die Zeit gemessen werden, die fuer ein Bild gebraucht werden
 # Hier wird die Zeit initialisiert.
 vorherige_Zeit = 0 
 
 
-
-# stelle ein, wie lange die Kamera laufen soll
-startzeit = time.time()
-laufzeit = 50000000 # s
-schleife = True
-
-# Fuehre den folgenden Abschnitt in einer Schleife aus, bis der Wert False
-# uebergeben wird
-while schleife:
+# Die folgende schleife wird solange durchlaufen, bis sie den buchstaben e
+# auf der Tastatur druecken (da sie immer wahr = 'True' ist)
+while True:
 	# Mache ein Foto und speichere es als "img"
 	success, img = Kamera.read()	
 		
@@ -76,11 +67,13 @@ while schleife:
 	
 	# Zeige das Foto an
 	cv2.imshow("Image",img)
-	cv2.waitKey(1)
-		
-	# wenn die laufzeit ueberschritten wird, wird die schleife auf False gesetzt
-	# und endet somit
-	if time.time() - startzeit >= laufzeit:
-		schleife = False
+	
+	# Sobald Sie den Buchstaben e (ende) druecken, schliesst das Programm
+	if cv2.waitKey(1) & 0xFF == ord('e'):
+          break
 
+# gib die Kamera wieder frei nachdem das Programm geschlossen ist
+Kamera.release()
+# schliesse alle Fenster
+cv2.destroyAllWindows()
 
