@@ -9,8 +9,7 @@ Kommentare, die im vorherigen Programm gemacht wurden, werden hier der
 Uebersicht halber verkuerzt oder weg gelassen.
 
 In diesem Programm soll getestet werden, ob:
-- die Module imageio (videos speichern) und os (Ordner erstellen) genutzt werden
-  koennen
+- das Modul os (Ordner erstellen) genutzt werden kann
 - Ordner erstellt werden koennen
 - Videos in den Ordnern gespeichert werden koennen
 - Sie die Ordner finden und die Videos ansehen koennen
@@ -25,7 +24,6 @@ Viel Spass beim ausprobieren!
 
 import cv2
 import time
-import imageio # videos speichern
 import os # Verzeichnisse (Ordner) erstellen
 
 
@@ -33,8 +31,8 @@ import os # Verzeichnisse (Ordner) erstellen
 # Erstelle Speicherordner und gebe der Datei einen Namen
 # beide Infos ergeben den Speicherpfad
 Speicherort = "Speicher-ordner"
-gif_name = "Videodatei.gif"
-gif_pfad = Speicherort + '/' + gif_name
+video_name = "Videodatei.avi"
+speicher_pfad = Speicherort + '/' + video_name
 
 # Probiere den Ordner zu erstellen (mit 'os' modul)
 try:
@@ -52,10 +50,22 @@ else:
 
 
 # initialisiere Kamera
-Kamera = cv2.VideoCapture(2)
+Kamera = cv2.VideoCapture(0)
+
+
+w, h = 1280,720
+Kamera.set(3,w)
+Kamera.set(4,h)
+
+# tatsaechliche weite und hoehe kann abweichen, deshalb werden wir die Variablen
+# hier doppelchecken
+w = int(Kamera.get(3)) # weite als integer
+h = int(Kamera.get(4)) # hoehe als integer
+
+
 
 # gebe an wie viele aufnahmen gemacht werden sollen
-anzahl_Bilder = 20	
+anzahl_Bilder = 200
 
 # die startzeit ist wichtig, um zu sehen wie viel zeit insgesamt vergangen ist
 # die "vorherige zeit" und die "aktuelle zeit" im der for schleife sind dazu 
@@ -63,38 +73,57 @@ anzahl_Bilder = 20
 startzeit = time.time()
 vorherige_Zeit = startzeit
 
-# kommando zum speicher der fotos
-with imageio.get_writer(gif_pfad, mode='I') as writer:
+
+# initialisiere den video writer.
+# Dieser nimmt den speicherpfad entgegen
+# danach das Format fuer .avi dateien (in variable fourcc gespeichert)
+# und die frames per second, mit der spater das video gespeichert werden soll
+# (Sie koennen den Wert veraendern und dann das gespeicherte Video anschauen,
+# sehen Sie einen Unterschied?)
+# und am ende noch die hoehe und weite des videos
+
+fps = 60
+fourcc = cv2.VideoWriter_fourcc(*'MPEG')
+video_writer = cv2.VideoWriter(speicher_pfad,fourcc, fps, (w,h))
+
+
+
+# wiederhole vorgang "anzahl_Bilder" mal 
+for i in range(anzahl_Bilder):
+	success, img = Kamera.read()	
 	
-	# wiederhole vorgang "anzahl_Bilder" mal 
-	for i in range(anzahl_Bilder):
-		success, img = Kamera.read()	
-		
-		#############################################################
-		# Zeit messung und ausgabe
-		
-		aktuelle_Zeit = time.time()	
-		aufnahmedauer = aktuelle_Zeit - vorherige_Zeit
-		
-		text = str(int(i)) + ":  " + str(round(
-				aktuelle_Zeit - startzeit,3)) + " s "  + str(round(
-				aufnahmedauer,3)) + " s " 
+	#############################################################
+	# Zeit messung und ausgabe
+	
+	aktuelle_Zeit = time.time()	
+	aufnahmedauer = aktuelle_Zeit - vorherige_Zeit
+	
+	text = str(int(i)) + ":  " + str(round(
+			aktuelle_Zeit - startzeit,3)) + " s "  + str(round(
+			aufnahmedauer,3)) + " s " 
 
-		vorherige_Zeit = aktuelle_Zeit
+	vorherige_Zeit = aktuelle_Zeit
 
-		cv2.putText(img, text, (10, 70), cv2.FONT_HERSHEY_PLAIN,
-			    3, (0, 100, 255), 3)
-		#############################################################	
-					
-		# Zeige die Bilder im Display an
-		cv2.imshow("Image",img)
-		
-		# Konvertiere Format von BGR (blau gruen rot) zu RGB (rot gruen blau)
-		# und speichere es mit 'writer'
-		imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-		writer.append_data(imgRGB)
-		
-		cv2.waitKey(1)
+	cv2.putText(img, text, (10, 70), cv2.FONT_HERSHEY_PLAIN,
+		    3, (0, 100, 255), 3)
+	#############################################################	
+				
+	# Zeige die Bilder im Display an
+	cv2.imshow("Image",img)
+	
+	# bringe img in richtiges format, falls es nicht bereits richtig ist
+	img = cv2.resize(img,(w,h)) 
+	
+	# fuege das bild zum video hinzu
+	video_writer.write(img)
+	
+	# Sobald Sie den Buchstaben e (ende) druecken, schliesst das Programm
+	if (cv2.waitKey(1) & 0xFF == ord('e')):
+		break
 
 
+# gib die Kamera wieder frei nachdem das Programm geschlossen ist
+Kamera.release()
+# schliesse alle Fenster
+cv2.destroyAllWindows()
 
