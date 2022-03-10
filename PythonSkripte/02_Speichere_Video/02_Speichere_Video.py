@@ -52,7 +52,7 @@ else:
 # initialisiere Kamera
 Kamera = cv2.VideoCapture(0)
 
-
+# stelle die hoehe und weite des bildes ein 
 w, h = 1280,720
 Kamera.set(3,w)
 Kamera.set(4,h)
