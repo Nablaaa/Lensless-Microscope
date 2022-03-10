@@ -164,7 +164,7 @@ class Kameramodul():
 						self.Hue)   + "-Gain-" + str(
 						self.Gain)   + "-Belichtung-" + str( 
 						1000 * self.Belichtung)   + "_ms-Weissabgl-" + str(
-						self.Weissabgl) + ".gif"
+						self.Weissabgl) + ".avi"
 						
 						
 		# ist Ihnen aufgefallen, dass die belichtungszeit mit dem Faktor 
@@ -186,7 +186,7 @@ class Kameramodul():
 			print ("Der Ordner %s wurde erfolgreich erstellt" % Speicherort)
 	
 	
-		speicher_pfad = Speicherort + "/" + videoname
+		speicher_pfad = Speicherort + "/" + speichername
 		
 		startzeit = time.time()
 		vorherige_Zeit = startzeit
@@ -277,7 +277,7 @@ def main():
 	
 	
 	Speicherort = "Experimentordner"
-	videoname = "Video-titel.avi" # endung .avi ist wichtig
+	videoname = "Video-titel" 
 	anzahl_Bilder = 300	# maximale anzahl von Bildern (danach wird die Aufnahme
 						# automatisch beendet
 	fps = 50
