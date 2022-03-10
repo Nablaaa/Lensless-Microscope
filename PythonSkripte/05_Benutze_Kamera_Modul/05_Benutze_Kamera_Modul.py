@@ -26,19 +26,18 @@ import KameraModul as kM
 ##########################################
 # Einstellungen
 
-kamera = 2
-wCam, hCam = 640, 480 
+kamera = 0
+wCam, hCam = 1080, 720 
 
 
-laufzeit_videoansicht = 5 # sekunden
+Speicherort = "Experimentordner"
+videoname = "Video-titel" 
 
-Speicherort = "Experiment-01"
-gif_name = "05_BenutzeKameramodul"
-
-anzahl_Bilder = 30	
+anzahl_Bilder = 1000 # maximale anzahl Bilder fur das video
+fps = 50 # framerate fur das video
 
 # Kameraeinstellungen
-Helligkeit = 30
+Helligkeit = 1
 Kontrast = 40
 Saettigung = 70
 Hue = 0 # spiegelt sozusagen die Hauptfarbe wieder (auch negative Werte)
@@ -66,48 +65,13 @@ meine_Kamera.kameraeinstellungen(Helligkeit, Kontrast,
 	
 	
 # starte die Videoansicht
-meine_Kamera.videoansicht(laufzeit_videoansicht)	
+meine_Kamera.videoansicht()	
+
+
+
 
 # speichere das Video
-meine_Kamera.videoaufnahme(Speicherort, gif_name, anzahl_Bilder)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+meine_Kamera.videoaufnahme(Speicherort, videoname, anzahl_Bilder, fps)
 
 
 
