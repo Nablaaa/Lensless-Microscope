@@ -3,8 +3,8 @@
 # Lensless-Microscope
 This repository is created for the open source project of a lensless microscope, which I created for education in schools. Nevertheless the concepts can also be used in other projects.
 
-Descriptive YouTube videos are available in this playlist (german language): **link is missing**
-If you want to support my work and help me to finance the next open source project, you can do this here: **link is missing**
+Descriptive YouTube videos are available in this playlist (german language): **not public yet**
+If you want to support my work and help me to finance the next open source project, you can do this here: **no link yet**
 
 ## Getting Started
 The recommended way of working with this repository is via the Anaconda or Miniconda. They can be installed via downloading on the webpage or with the terminal.
@@ -117,8 +117,6 @@ and see, which integer is the correct one. In normal case this should be either 
 ## author
 ```
 Eric Schmidt
-B.Sc. Physics
-Dresden
 ```
 
 
