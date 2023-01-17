@@ -19,7 +19,7 @@ Viel Spass beim ausprobieren!
 
 
 # importiere "Bibliotheken" die einen Grossteil der Arbeit machen
-import cv2 # Zugriff auf die Kamera
+import cv2 # Zugriff auf die  Kamera
 import time # Zeitmessungen
 
 # suche eine Kamera aus 
