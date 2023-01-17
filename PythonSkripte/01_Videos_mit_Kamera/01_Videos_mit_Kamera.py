@@ -19,7 +19,7 @@ Viel Spass beim ausprobieren!
 
 
 # importiere "Bibliotheken" die einen Grossteil der Arbeit machen
-import cv2 # Zugriff auf Kamera
+import cv2 # Zugriff auf die Kamera
 import time # Zeitmessungen
 
 # suche eine Kamera aus 
@@ -76,4 +76,3 @@ while True:
 Kamera.release()
 # schliesse alle Fenster
 cv2.destroyAllWindows()
-
