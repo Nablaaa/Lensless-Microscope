@@ -1,0 +1,73 @@
+# Diese Datei bestimmt das Design der App
+
+# Der Name dieser Datei muss zum Namen der App passen
+# SimpleApp.py hat simple.kv als design
+
+#:kivy 1.0.9
+
+# Namer der Klasse hier einfuegen
+<PongGame>:    
+
+    # define a variable for the ball
+    ball: pong_ball
+    player1: player_left
+    player2: player_right
+
+    canvas:
+        # Fuege ein ausgemaltes
+        # rechteck im Zentrum ein
+        # skaliere es mit der Hoehe
+        # des Fensters
+        Rectangle:
+            pos: self.center_x - 5, 0
+            size: 10, self.height
+            
+    # positioniere label (text) mit hinblick
+    # auf die weite des fensters (root.width)
+    # und mit abstand zum top
+    Label:
+        font_size: 70  
+        center_x: root.width / 4
+        top: root.top - 50
+        text: str(root.player1.score)
+        
+    Label:
+        font_size: 70  
+        center_x: root.width * 3 / 4
+        top: root.top - 50
+        text: str(root.player2.score)
+    
+    # introduce pong ball
+    # and connect it with variable 
+    PongBall:
+        id: pong_ball
+        center: self.parent.center
+
+    PongPaddle:
+        id: player_left
+        x: root.x
+        center_y: root.center_y
+        
+    PongPaddle:
+        id: player_right
+        x: root.width - self.width
+        center_y: root.center_y
+        
+
+
+
+# connect the ball with the class (in the game) itself
+<PongBall>:
+    size: 50, 50
+    canvas:
+        Ellipse:
+            pos: self.pos
+            size: self.size
+
+
+<PongPaddle>:
+    size: 25, 200
+    canvas:
+        Rectangle:
+            pos: self.pos
+            size: self.size
